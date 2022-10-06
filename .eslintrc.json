@@ -1,0 +1,9 @@
+{
+  "extends": "standard-with-typescript",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  }
+}
+
+// ParserOptions
+// Project -> Projeto relacionado ao typescript, para que o eslint possa ler as configurações do typescript.
