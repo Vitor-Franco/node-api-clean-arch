@@ -8,9 +8,3 @@
   }
 }
 
-// Compiler Options, 
-// outDir, onde os arquivos serão gerados.
-// module, qual o formato do código ao ser compilado (ou seja, podemos usar a funcionalidade de import/export mas no build ser require/module.exports).
-// target, qual a versão do javascript que o código será gerado. Ficar de olho em qual versão do node está sendo usada no servidor, para que não tenhamos erros na hora de compilar o código e utilizar funcionalidades n disponível naquela versão X do node.
-// esModuleInterop, para os modulos externos possam utilizar o import/export.
-// allowJs, para que o typescript aceite arquivos javascript.
