@@ -7,20 +7,6 @@ interface SutTypes {
   emailValidatorStub: EmailValidator
 }
 
-const makeEmailValidatorWithError = (): EmailValidator => {
-  // Stub é um tipo dos mocks, dentre o fake, stub e spy
-  // Stub retorna sempre um valor "marretado/chumbado"
-  class EmailValidatorStub implements EmailValidator {
-    isValid (email: string): boolean {
-      // Sempre mockamos um valor positivo, para que não tenha influencia em outros testes
-      // Porem no local que queremos testar o erro, mockamos um valor negativo
-      // Apenas no teste em especifico
-      throw new Error()
-    }
-  }
-  return new EmailValidatorStub()
-}
-
 const makeEmailValidator = (): EmailValidator => {
   // Stub é um tipo dos mocks, dentre o fake, stub e spy
   // Stub retorna sempre um valor "marretado/chumbado"
@@ -164,8 +150,10 @@ describe('SignUp Controller', () => {
   })
 
   test('should return 500 if EmailValidator throws', () => {
-    const emailValidatorStub = makeEmailValidatorWithError()
-    const sut = new SignUpController(emailValidatorStub)
+    const { sut, emailValidatorStub } = makeSut()
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error()
+    })
 
     const httpRequest = {
       body: {
