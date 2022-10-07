@@ -15,5 +15,7 @@ describe('SignUp Controller', () => {
 
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
+    // Utilizamos toEqual, porque o toBe compara o tipo do objeto e o toEqual compara o conteúdo do objeto
+    expect(httpResponse.body).toEqual(new Error('Missing param: name'))
   })
 })
