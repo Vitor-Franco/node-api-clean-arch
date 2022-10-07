@@ -122,4 +122,26 @@ describe('SignUp Controller', () => {
     // Utilizamos toEqual, porque o toBe compara o tipo do objeto e o toEqual compara o conteúdo do objeto
     expect(httpResponse.body).toEqual(new InvalidParamError('email'))
   })
+
+  // Neste teste queremos assegurar que o e-mail passado via parametro no httpRequest,
+  // É o mesmo e-mail que é utilizado no método isValid do emailValidatorStub
+  // Garantindo assim que o controller não está manipulando o e-mail.
+  test('should call EmailValidator with correct email', () => {
+    // sut = system under test
+    const { sut, emailValidatorStub } = makeSut()
+
+    const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
+
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@email.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+
+    sut.handle(httpRequest)
+    expect(isValidSpy).toHaveBeenCalledWith(httpRequest.body.email)
+  })
 })
