@@ -9,7 +9,7 @@ export class AccountMongoRepository implements AddAccountRepository {
   // sendo assim nossa camada de domínio não deve se adaptar ao mongo
   async add (accountData: AddAccountModel): Promise<AccountModel> {
     const accountCollection = MongoHelper.getCollection('accounts')
-    const result = await accountCollection.insertOne(accountData)
-    return MongoHelper.map(String(result.insertedId), accountData)
+    await accountCollection.insertOne(accountData)
+    return MongoHelper.map(accountData)
   }
 }

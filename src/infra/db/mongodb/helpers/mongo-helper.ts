@@ -15,10 +15,12 @@ export const MongoHelper = {
     return this.client.db().collection(name)
   },
 
-  map (id: string, collection: any): any {
+  map (collection: any): any {
+    const { _id, ...collectionWithoutId } = collection
+
     return {
-      ...collection,
-      id
+      ...collectionWithoutId,
+      id: _id
     }
   }
 }
