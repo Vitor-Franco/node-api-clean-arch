@@ -10,6 +10,13 @@ describe('Account Mongo Repository', () => {
     await MongoHelper.disconnect()
   })
 
+  // Evita que fique sujo o banco de dados
+  // E interfira em outros testes
+  beforeEach(async () => {
+    const accountCollection = MongoHelper.getCollection('accounts')
+    await accountCollection.deleteMany({})
+  })
+
   const makeSut = (): AccountMongoRepository => {
     return new AccountMongoRepository()
   }
