@@ -8,7 +8,7 @@ export class AccountMongoRepository implements AddAccountRepository {
   // Uma vez que o _id é específico da implementação com o mongo,
   // sendo assim nossa camada de domínio não deve se adaptar ao mongo
   async add (accountData: AddAccountModel): Promise<AccountModel> {
-    const accountCollection = MongoHelper.getCollection('accounts')
+    const accountCollection = await MongoHelper.getCollection('accounts')
     await accountCollection.insertOne(accountData)
     return MongoHelper.map(accountData)
   }
