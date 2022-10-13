@@ -16,7 +16,7 @@ describe('SignUp Routes', () => {
   // Evita que fique sujo o banco de dados
   // E interfira em outros testes
   beforeEach(async () => {
-    const accountCollection = MongoHelper.getCollection('accounts')
+    const accountCollection = await MongoHelper.getCollection('accounts')
     await accountCollection.deleteMany({})
   })
 
