@@ -2,6 +2,10 @@ import { Collection } from 'mongodb'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { LogMongoRepository } from './log'
 
+const makeSut = (): LogMongoRepository => {
+  return new LogMongoRepository()
+}
+
 describe('Log Mongo Repository', () => {
   let errorsCollection: Collection
   beforeAll(async () => {
@@ -23,7 +27,7 @@ describe('Log Mongo Repository', () => {
   // Uma vez que nossa camada de domínio não depende do retorno dessa inserção
   // E não devemos alterar a camada de domínio so para que nosso teste de certo
   test('should create an error log on success', async () => {
-    const sut = new LogMongoRepository()
+    const sut = makeSut()
     await sut.logError('any_error')
 
     const count = await errorsCollection.countDocuments()
