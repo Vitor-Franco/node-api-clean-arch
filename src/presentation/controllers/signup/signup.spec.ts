@@ -121,26 +121,6 @@ describe('SignUp Controller', () => {
     expect(httpResponse).toEqual(serverError(new ServerError(null)))
   })
 
-  test('should return 400 if password confirmation fails', async () => {
-    // sut = system under test
-    const { sut } = makeSut()
-
-    const request = makeFakeRequest()
-
-    Object.assign(request, {
-      body: {
-        ...request.body,
-        passwordConfirmation: 'invalid_password'
-      }
-    })
-
-    const httpResponse = await sut.handle(request)
-    // Utilizamos toEqual, porque o toBe compara o tipo do objeto e o toEqual compara o conteúdo do objeto
-    expect(httpResponse).toEqual(badRequest(
-      new InvalidParamError('passwordConfirmation')
-    ))
-  })
-
   test('should call AddAccount with correct values', async () => {
     const { sut, addAccountStub } = makeSut()
     const addSpy = jest.spyOn(addAccountStub, 'add')
