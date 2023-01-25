@@ -1,17 +1,14 @@
-import { AddAccount, HttpRequest, HttpResponse, EmailValidator, Controller, Validation } from './signup-protocols'
-import { InvalidParamError } from '../../errors'
+import { AddAccount, HttpRequest, HttpResponse, Controller, Validation } from './signup-protocols'
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
 
 export class SignUpController implements Controller {
-  private readonly emailValidator: EmailValidator
   private readonly addAccount: AddAccount
   private readonly validation: Validation
 
   // Utilizamos a interface EmailValidator para fazer a inversão de dependencia,
   // pois assim podemos trocar a implementação do emailValidator sem precisar alterar o código
   // em um possível refactory
-  constructor (emailValidator: EmailValidator, addAccount: AddAccount, validation: Validation) {
-    this.emailValidator = emailValidator
+  constructor (addAccount: AddAccount, validation: Validation) {
     this.addAccount = addAccount
     this.validation = validation
   }
@@ -25,11 +22,6 @@ export class SignUpController implements Controller {
       }
 
       const { name, email, password } = httpRequest.body
-
-      const isValidEmail = this.emailValidator.isValid(email)
-      if (!isValidEmail) {
-        return badRequest(new InvalidParamError('email'))
-      }
 
       const account = await this.addAccount.add({
         name,

@@ -1,21 +1,7 @@
-import { AccountModel, AddAccount, AddAccountModel, EmailValidator, HttpRequest, Validation } from './signup-protocols'
-import { ServerError, MissingParamError, InvalidParamError } from '../../errors'
+import { AccountModel, AddAccount, AddAccountModel, HttpRequest, Validation } from './signup-protocols'
+import { ServerError, MissingParamError } from '../../errors'
 import { SignUpController } from './signup'
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
-
-const makeEmailValidator = (): EmailValidator => {
-  // Stub é um tipo dos mocks, dentre o fake, stub e spy
-  // Stub retorna sempre um valor "marretado/chumbado"
-  class EmailValidatorStub implements EmailValidator {
-    isValid (email: string): boolean {
-      // Sempre mockamos um valor positivo, para que não tenha influencia em outros testes
-      // Porem no local que queremos testar o erro, mockamos um valor negativo
-      // Apenas no teste em especifico
-      return true
-    }
-  }
-  return new EmailValidatorStub()
-}
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
@@ -39,21 +25,18 @@ const makeValidation = (): Validation => {
 
 interface SutTypes {
   sut: SignUpController
-  emailValidatorStub: EmailValidator
   addAccountStub: AddAccount
   validationStub: Validation
 }
 
 // Factory (Fábrica)
 const makeSut = (): SutTypes => {
-  const emailValidatorStub = makeEmailValidator()
   const addAccountStub = makeAddAccount()
   const validationStub = makeValidation()
-  const sut = new SignUpController(emailValidatorStub, addAccountStub, validationStub)
+  const sut = new SignUpController(addAccountStub, validationStub)
 
   return {
     sut,
-    emailValidatorStub,
     addAccountStub,
     validationStub
   }
@@ -76,41 +59,6 @@ const makeFakeRequest = (): HttpRequest => ({
 })
 
 describe('SignUp Controller', () => {
-  test('should return 400 if an invalid email is provided', async () => {
-    // sut = system under test
-    const { sut, emailValidatorStub } = makeSut()
-
-    // Mockando o método isValid do emailValidatorStub
-    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
-
-    const httpResponse = await sut.handle(makeFakeRequest())
-    // Utilizamos toEqual, porque o toBe compara o tipo do objeto e o toEqual compara o conteúdo do objeto
-    expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')))
-  })
-
-  // Neste teste queremos assegurar que o e-mail passado via parametro no httpRequest,
-  // É o mesmo e-mail que é utilizado no método isValid do emailValidatorStub
-  // Garantindo assim que o controller não está manipulando o e-mail.
-  test('should call EmailValidator with correct email', async () => {
-    // sut = system under test
-    const { sut, emailValidatorStub } = makeSut()
-
-    const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
-
-    await sut.handle(makeFakeRequest())
-    expect(isValidSpy).toHaveBeenCalledWith('any_email@email.com')
-  })
-
-  test('should return 500 if EmailValidator throws', async () => {
-    const { sut, emailValidatorStub } = makeSut()
-    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
-      throw new Error()
-    })
-
-    const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(serverError(new ServerError(null)))
-  })
-
   test('should return 500 if AddAccount throws', async () => {
     const { sut, addAccountStub } = makeSut()
     jest.spyOn(addAccountStub, 'add').mockImplementationOnce(async () => {
