@@ -1,7 +1,7 @@
 import {
   AuthenticationModel,
   HashComparer,
-  TokenGenerator,
+  Encrypter,
   LoadAccountByEmailRepository,
   UpdateAccessTokenRepository,
   Authentication
@@ -10,18 +10,18 @@ import {
 export class DbAuthentication implements Authentication {
   private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository
   private readonly hashComparer: HashComparer
-  private readonly tokenGenerator: TokenGenerator
+  private readonly encrypter: Encrypter
   private readonly updateAcessTokenRepository: UpdateAccessTokenRepository
 
   constructor (
     loadAccountByEmailRepository: LoadAccountByEmailRepository,
     hashComparer: HashComparer,
-    tokenGenerator: TokenGenerator,
+    encrypter: Encrypter,
     updateAcessTokenRepository: UpdateAccessTokenRepository
   ) {
     this.loadAccountByEmailRepository = loadAccountByEmailRepository
     this.hashComparer = hashComparer
-    this.tokenGenerator = tokenGenerator
+    this.encrypter = encrypter
     this.updateAcessTokenRepository = updateAcessTokenRepository
   }
 
@@ -37,7 +37,7 @@ export class DbAuthentication implements Authentication {
       return null
     }
 
-    const acessToken = await this.tokenGenerator.generate(account.id)
+    const acessToken = await this.encrypter.encrypt(account.id)
     await this.updateAcessTokenRepository.update(account.id, acessToken)
 
     return acessToken
