@@ -17,3 +17,20 @@ Project -> Projeto relacionado ao typescript, para que o eslint possa ler as con
 2.1 -> Passamos para o lint-staged o passo-a-passo de comandos a serem executados, e em quais arquivos serão executados
 
 https://www.notion.so/vitor-franco/NodeJs-Patterns-e-Aplica-o-118933676aa44bcabad5c2296e9b8733
+
+# Segurança
+
+## Criptografia
+É usado para segurança.
+### Hash
+1. é irreversível, não tem como voltar para o valor original
+2. Ao gerar um hash, sempre teremos o mesmo valor para o mesmo dado. Exemplo, se eu gerar um hash para a palavra "teste", sempre teremos o mesmo HASH para essa palavra.
+3. Pode ter uma chave secreta.
+4. salt, é uma string/number aleatória que é adicionada ao dado para gerar o hash. Exemplo, se eu gerar um hash para a palavra "teste", sempre teremos o mesmo HASH para essa palavra, porém, se eu gerar um hash para a palavra "teste" + "salt", sempre teremos um HASH diferente para essa palavra.
+
+### Encrypt
+1. Sempre usa uma chave secreta, porém esse encrypt é reversível.
+2. Ao encryptar, sempre teremos um valor diferente para o mesmo dado. Exemplo, se eu encryptar a palavra "teste", sempre teremos um Encrypt com valor diferente para essa palavra.
+
+## Encoding
+É usado para transferência de dados, não está preocupado com segurança. Apenas oculta as informações.
