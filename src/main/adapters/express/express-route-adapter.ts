@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { Controller, HttpRequest } from '../../presentation/protocols'
+import { Controller, HttpRequest } from '../../../presentation/protocols'
 
 // Utilizamos um Adapter para o Express.
 // Resumidamente, ele serve para desacoplar a lógica de encaminhamento de parametros
