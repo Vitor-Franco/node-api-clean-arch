@@ -1,17 +1,20 @@
-import { AddAccount, HttpRequest, HttpResponse, Controller, Validation } from './signup-controller-protocols'
+import {
+  AddAccount,
+  HttpRequest,
+  HttpResponse,
+  Controller,
+  Validation
+} from './signup-controller-protocols'
 import { badRequest, ok, serverError } from '../../helpers/http/http-helper'
 
 export class SignUpController implements Controller {
-  private readonly addAccount: AddAccount
-  private readonly validation: Validation
-
   // Utilizamos a interface EmailValidator para fazer a inversão de dependencia,
   // pois assim podemos trocar a implementação do emailValidator sem precisar alterar o código
   // em um possível refactory
-  constructor (addAccount: AddAccount, validation: Validation) {
-    this.addAccount = addAccount
-    this.validation = validation
-  }
+  constructor (
+    private readonly addAccount: AddAccount,
+    private readonly validation: Validation
+  ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
