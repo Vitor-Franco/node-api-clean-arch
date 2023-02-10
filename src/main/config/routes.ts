@@ -1,7 +1,8 @@
 import { Express, Router } from 'express'
 
 // Assim como um fs do node, o fastglob nos auxilia a monitorar/ler arquivos dentros de pastas.
-import fg from 'fast-glob'
+import { readdirSync } from 'fs'
+import path from 'node:path'
 
 export default (app: Express): void => {
   const router = Router()
@@ -20,7 +21,13 @@ export default (app: Express): void => {
   // e após isso concatenamos o path do arquivo que queremos importar.
   // 3. a notação .default, pega a exportação default do arquivo importado.
   // e passa a instancia do Routes do express.
-  fg.sync('**/src/main/routes/**routes.ts').map(async file =>
-    (await import (`../../../${file}`)).default(router)
-  )
+  // fg.sync('**/src/main/routes/**routes.ts').map(async file =>
+  //   (await import (`../../../${file}`)).default(router)
+  // )
+
+  readdirSync(path.join(__dirname, '..', 'routes')).map(async (file) => {
+    if (!file.includes('.test.')) {
+      (await import(`../routes/${file}`)).default(router)
+    }
+  })
 }

@@ -35,8 +35,12 @@ https://www.notion.so/vitor-franco/NodeJs-Patterns-e-Aplica-o-118933676aa44bcaba
 ## Encoding
 É usado para transferência de dados, não está preocupado com segurança. Apenas oculta as informações.
 
-## Architeture
+## Architecture
 DataLayer, DomainLayer e Presentation -> São as camadas mais importantes.
 InfraLayer - Conversa com o DataLayer (preferencial) ou o DomainLayer. É uma camada que fica na ponta da arquitetura e que conversa diretamente com uma biblioteca ou framework.
 PresentationLayer - Conversa com o DomainLayer.
 MainLayer - É a camada que conhece as outras camadas. 
+
+
+## Deploy
+rimraf -> é um pacote que remove arquivos e pastas.
